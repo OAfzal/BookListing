@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -114,7 +115,33 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         getLoaderManager().restartLoader(0,null,this).forceLoad();
     }
 
+    public static void updateUI(ArrayList<Book> booksToAdd){
 
+    }
+
+
+}
+
+class customAsyncTask extends AsyncTask<String,Void,ArrayList<Book>>{
+
+
+    @Override
+    protected ArrayList<Book> doInBackground(String... strings) {
+
+        ArrayList<Book> books = new ArrayList<Book>();
+
+        QueryUtils queryUtils = new QueryUtils(strings[0]);
+        books =queryUtils.fetchData();
+
+        return null;
+    }
+
+    @Override
+    protected void onPostExecute(ArrayList<Book> books) {
+        super.onPostExecute(books);
+        MainActivity.updateUI(books);
+
+    }
 }
 
 
