@@ -37,7 +37,7 @@ import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<Book>> {
+public class MainActivity extends AppCompatActivity {
 
     ArrayList<Book> booksBackup = new ArrayList<Book>();
 
@@ -47,30 +47,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     public String BOOKS_REQUEST_URL ="https://www.googleapis.com/books/v1/volumes?key=AIzaSyBsLDs0hHCiRJa5dW8YPJS81pWLTMr8noo&prettyPrint=true&q=";
 
-
     public BookAdapter adapter;
 
-    @Override
-    public android.content.Loader<ArrayList<Book>> onCreateLoader(int i, Bundle bundle) {
-        relativeLayout.setVisibility(View.VISIBLE);
-        return new BookLoader(this,BOOKS_REQUEST_URL+searchBox.getText());
-
-    }
-
-    @Override
-    public void onLoaderReset(android.content.Loader<ArrayList<Book>> loader) {
-        adapter.clear();
-
-    }
-
-    @Override
-    public void onLoadFinished(android.content.Loader<ArrayList<Book>> loader, ArrayList<Book> books) {
-        booksBackup = books;
-        relativeLayout.setVisibility(View.GONE);
-        adapter.clear();
-        adapter.addAll(books);
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loaderRestartMethod();
+                
             }
         });
 
@@ -111,11 +89,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     }
 
-    public void loaderRestartMethod(){
-        getLoaderManager().restartLoader(0,null,this).forceLoad();
-    }
-
     public static void updateUI(ArrayList<Book> booksToAdd){
+
 
     }
 
@@ -133,14 +108,13 @@ class customAsyncTask extends AsyncTask<String,Void,ArrayList<Book>>{
         QueryUtils queryUtils = new QueryUtils(strings[0]);
         books =queryUtils.fetchData();
 
-        return null;
+        return books;
     }
 
     @Override
     protected void onPostExecute(ArrayList<Book> books) {
         super.onPostExecute(books);
         MainActivity.updateUI(books);
-
     }
 }
 
