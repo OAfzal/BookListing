@@ -84,7 +84,7 @@ class QueryUtils{
         return output.toString();
     }
 
-    private ArrayList<Book> extractFeaturesFromJSON(String jsonResponse){
+    public static ArrayList<Book> extractFeaturesFromJSON(String jsonResponse){
         ArrayList<Book> booksArray = new ArrayList<Book>();
 
         int pageCount = 0;

@@ -14,6 +14,12 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -54,10 +60,32 @@ public class MainActivity extends AppCompatActivity {
                 InputMethodManager imm = (InputMethodManager)getSystemService(
                         Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(searchBox.getWindowToken(), 0);
-                new CustomAsyncTask().execute(BOOKS_REQUEST_URL+(searchBox.getEditableText().toString()));
+                getData();
+
             }
         });
 
+    }
+
+    public void getData(){
+        StringRequest stringRequest = new StringRequest(BOOKS_REQUEST_URL + (searchBox.getEditableText().toString()), new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                booksBackup = QueryUtils.extractFeaturesFromJSON(response);
+                updateUI(QueryUtils.extractFeaturesFromJSON(response));
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.e("getData",error.getMessage());
+
+            }
+        });
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(stringRequest);
     }
 
     @Override
@@ -71,31 +99,6 @@ public class MainActivity extends AppCompatActivity {
         adapter.clear();
         adapter.addAll(booksToAdd);
     }
-
-    class CustomAsyncTask extends AsyncTask<String,Void,ArrayList<Book>>{
-
-
-        @Override
-        protected ArrayList<Book> doInBackground(String... strings) {
-
-            ArrayList<Book> books = new ArrayList<Book>();
-
-            Log.i("MAINACTLINK",strings[0]);
-            QueryUtils queryUtils = new QueryUtils(strings[0]);
-            books =queryUtils.fetchData();
-
-            return books;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Book> books) {
-            super.onPostExecute(books);
-            booksBackup = books;
-            updateUI(books);
-        }
-    }
-
-
 
 }
 
