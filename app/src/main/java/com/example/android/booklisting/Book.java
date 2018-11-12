@@ -1,18 +1,54 @@
 package com.example.android.booklisting;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class Book {
 
+    @SerializedName("title")
+    @Expose
     private String bookTitle;
+
+
+    @SerializedName("authors")
+    @Expose
     private String bookAuthor;
+
+    @SerializedName("categories")
+    @Expose
     private String bookCategory;
+
+    @SerializedName("description")
+    @Expose
     private String bookDescription;
+
+    @SerializedName("publishedDate")
+    @Expose
     private String bookPublishedDate;
+
+    @SerializedName("pageCount")
+    @Expose
     private int bookPageCount;
     //private String bookURL;
+
+    @SerializedName("thumbnail")
+    @Expose
     private String bookThumbnailURL;
+
+    @SerializedName("ratingsCount")
+    @Expose
     private int bookRatingCount;
+
+    @SerializedName("language")
+    @Expose
     private String bookLanguages;
+
+    @SerializedName("averageRating")
+    @Expose
     private double bookRating;
+
+    @SerializedName("ISBN_13")
+    @Expose
     private String ISBN_13;
 
     public Book() {

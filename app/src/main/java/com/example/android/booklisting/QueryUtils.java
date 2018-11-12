@@ -20,69 +20,6 @@ import javax.net.ssl.HttpsURLConnection;
 
 class QueryUtils{
 
-    String link;
-
-    public QueryUtils(String url) {
-        link = url;
-    }
-
-    public ArrayList<Book> fetchData(){
-        String jsonResponse = makeHTTPSRequest();
-        ArrayList<Book> books = extractFeaturesFromJSON(jsonResponse);
-
-        return books;
-    }
-
-    private String makeHTTPSRequest(){
-        Log.i("QueryUtils","MakeHttpsRequest");
-        String jsonResponse="";
-        Log.i("the URL",link);
-        try {
-            URL url = new URL(link);
-
-            HttpsURLConnection httpsURLConnection = (HttpsURLConnection) url.openConnection();
-
-            httpsURLConnection.setRequestMethod("GET");
-
-            httpsURLConnection.connect();
-
-            Log.i("makeHTTPSREQ","calling method readfrominputstream");
-
-            InputStream inputStream = httpsURLConnection.getInputStream();
-
-            jsonResponse = readInputStream(inputStream);
-            Log.i("MakheHttpsreq","Back from readInputStream");
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Log.i("RESPONSE",jsonResponse);
-
-        return jsonResponse;
-
-
-    }
-
-    private String readInputStream(InputStream inputStream){
-
-        StringBuilder output = new StringBuilder();
-        InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-        try {
-            String line = bufferedReader.readLine();
-            while(line != null){
-                output.append(line);
-                line = bufferedReader.readLine();
-            }
-            bufferedReader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return output.toString();
-    }
 
     public static ArrayList<Book> extractFeaturesFromJSON(String jsonResponse){
         ArrayList<Book> booksArray = new ArrayList<Book>();
@@ -152,6 +89,10 @@ class QueryUtils{
                 industryIdentifiers = volumeInfo.optJSONArray("industryIdentifiers");
 
                 ISBN_13 = industryIdentifiers.optJSONObject(0).getString("identifier");
+
+                if(ISBN_13  == null){
+                    ISBN_13 = "N/A";
+                }
 
                 Book newBook = new Book(title, author, category, description, publishedDate, pageCount, imageLinkURL, ratingCount, language, averageRating, ISBN_13);
 

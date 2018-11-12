@@ -19,6 +19,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     RelativeLayout relativeLayout;
     EditText searchBox;
+    ImageButton searchButton;
 
     public String BOOKS_REQUEST_URL ="https://www.googleapis.com/books/v1/volumes?key=AIzaSyBsLDs0hHCiRJa5dW8YPJS81pWLTMr8noo&prettyPrint=true&q=";
 
@@ -41,17 +45,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         searchBox = (EditText) findViewById(R.id.search_box);
-
         relativeLayout = (RelativeLayout) findViewById(R.id.prograss_bar_layout);
-
-        ImageButton searchButton =(ImageButton) findViewById(R.id.button_search);
-
+        searchButton =(ImageButton) findViewById(R.id.button_search);
         relativeLayout.setVisibility(View.GONE);
 
         adapter = new BookAdapter(this, new ArrayList<Book>());
-
         ListView bookListView = (ListView) findViewById(R.id.list_View);
-
         bookListView.setAdapter(adapter);
 
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -71,16 +70,14 @@ public class MainActivity extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(BOOKS_REQUEST_URL + (searchBox.getEditableText().toString()), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                booksBackup = QueryUtils.extractFeaturesFromJSON(response);
-                updateUI(QueryUtils.extractFeaturesFromJSON(response));
 
+                updateUI(QueryUtils.extractFeaturesFromJSON(response));
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
                 Log.e("getData",error.getMessage());
-
             }
         });
 
@@ -101,6 +98,4 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
-
-
 
