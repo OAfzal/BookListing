@@ -1,42 +1,20 @@
 package com.example.android.booklisting;
 
-import android.app.LoaderManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.ConnectivityManager;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class MainActivity extends AppCompatActivity {
 
