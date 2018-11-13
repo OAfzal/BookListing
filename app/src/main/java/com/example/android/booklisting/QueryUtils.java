@@ -50,8 +50,6 @@ class QueryUtils{
 
                 title = volumeInfo.optString("title");
 
-                Log.i("extraction",title);
-
                 authorArray = volumeInfo.optJSONArray("authors");
 
                 author = "";
@@ -88,16 +86,17 @@ class QueryUtils{
 
                 industryIdentifiers = volumeInfo.optJSONArray("industryIdentifiers");
 
-                ISBN_13 = industryIdentifiers.optJSONObject(0).getString("identifier");
 
-                if(ISBN_13  == null){
-                    ISBN_13 = "N/A";
-                }
+//                if(industryIdentifiers.optJSONObject(0).getString("identifier") != null)
+//                    ISBN_13 = industryIdentifiers.optJSONObject(0).getString("identifier");
+//                else
+//                    ISBN_13 = "N/A";
+//
+//                if(ISBN_13  == null){
+//                    ISBN_13 = "N/A";
+//                }
 
                 Book newBook = new Book(title, author, category, description, publishedDate, pageCount, imageLinkURL, ratingCount, language, averageRating, ISBN_13);
-
-
-                Log.i("NewBook",newBook.toString());
 
                 booksArray.add(newBook);
             }

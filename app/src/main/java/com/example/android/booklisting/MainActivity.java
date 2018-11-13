@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -27,12 +29,12 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<Book> booksBackup = new ArrayList<Book>();
-    public BookAdapter adapter;
+    ArrayList<Book> books= new ArrayList<Book>();
+    BookRecyclerAdapter adapter2;
 
-    RelativeLayout relativeLayout;
     EditText searchBox;
     ImageButton searchButton;
+    RecyclerView recyclerView;
 
     public String BOOKS_REQUEST_URL ="https://www.googleapis.com/books/v1/volumes?key=AIzaSyBsLDs0hHCiRJa5dW8YPJS81pWLTMr8noo&prettyPrint=true&q=";
 
@@ -45,13 +47,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         searchBox = (EditText) findViewById(R.id.search_box);
-        relativeLayout = (RelativeLayout) findViewById(R.id.prograss_bar_layout);
         searchButton =(ImageButton) findViewById(R.id.button_search);
-        relativeLayout.setVisibility(View.GONE);
+        recyclerView = findViewById(R.id.recycler_view);
 
-        adapter = new BookAdapter(this, new ArrayList<Book>());
-        ListView bookListView = (ListView) findViewById(R.id.list_View);
-        bookListView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,11 +67,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getData(){
-        StringRequest stringRequest = new StringRequest(BOOKS_REQUEST_URL + (searchBox.getEditableText().toString()), new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(BOOKS_REQUEST_URL + (searchBox.getEditableText().toString()) , new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
-                updateUI(QueryUtils.extractFeaturesFromJSON(response));
+                books = QueryUtils.extractFeaturesFromJSON(response);
+                adapter2 = new BookRecyclerAdapter(getApplicationContext(),books);
+                recyclerView.setAdapter(adapter2);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -83,18 +85,6 @@ public class MainActivity extends AppCompatActivity {
 
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(stringRequest);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        adapter.addAll(booksBackup);
-    }
-
-    public void updateUI(ArrayList<Book> booksToAdd){
-
-        adapter.clear();
-        adapter.addAll(booksToAdd);
     }
 
 }

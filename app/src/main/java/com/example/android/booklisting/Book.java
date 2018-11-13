@@ -84,7 +84,8 @@ public class Book {
     }
 
     public String getBookCategory() {
-        return bookCategory;
+        char[] oldChar ={'[',']','"'};
+        return refineCategory(bookCategory,oldChar);
     }
 
     public void setBookCategory(String bookCategory) {
@@ -153,5 +154,15 @@ public class Book {
 
     public void setISBN_13(String ISBN_13) {
         this.ISBN_13 = ISBN_13;
+    }
+
+    private String refineCategory(String category,char[] oldChars){
+        String refinedCategory = "";
+
+        for(int i=0; i<oldChars.length; i++){
+            category = category.replace(oldChars[i],' ');
+        }
+        refinedCategory = category.trim();
+        return refinedCategory;
     }
 }

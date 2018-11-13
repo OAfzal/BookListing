@@ -1,31 +1,38 @@
 package com.example.android.booklisting;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
 public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapter.MyViewHolder>{
 
+    Context context;
+
     private ArrayList<Book> mBooks;
 
-    public BookRecyclerAdapter(ArrayList<Book> mBooks) {
+    public BookRecyclerAdapter(Context context,ArrayList<Book> mBooks) {
         this.mBooks = mBooks;
+        this.context = context;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
-        Context context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View bookView = inflater.inflate(R.layout.list_item_view_2, viewGroup,false);
+        View bookView = inflater.inflate(R.layout.list_item_view, viewGroup,false);
 
         MyViewHolder viewHolder = new MyViewHolder(bookView);
 
@@ -33,15 +40,28 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int position) {
+    public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, int position) {
 
-        Book book = mBooks.get(position);
+        final Book book = mBooks.get(position);
 
-        TextView book_title_1 = myViewHolder.book_title_1;
-        book_title_1.setText(book.getBookTitle());
+        myViewHolder.book_title.setText(book.getBookTitle());
+        myViewHolder.book_author.setText(book.getBookAuthor());
+        myViewHolder.book_category.setText(book.getBookCategory());
+        myViewHolder.book_reviewers.setText(Integer.toString(book.getBookRatingCount()));
+        myViewHolder.book_languages.setText(book.getBookLanguages());
+        myViewHolder.ratingBar.setRating((float) book.getBookRating());
 
-        TextView book_author_1 = myViewHolder.book_author_1;
-        book_author_1.setText(book.getBookAuthor());
+        myViewHolder.book_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context,BookExtendedActivity.class);
+                intent.putExtra("description",book.getBookDescription());
+                intent.putExtra("title",book.getBookTitle());
+                context.startActivity(intent);
+            }
+        });
+        Glide.with(context).load(book.getBookThumbnailURL()).into(myViewHolder.book_thumbnail);
+
     }
 
     @Override
@@ -51,18 +71,28 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
 
     class MyViewHolder extends RecyclerView.ViewHolder{
 
-        TextView book_title_1;
-        TextView book_author_1;
+        TextView book_title;
+        TextView book_author;
+        TextView book_category;
+        TextView book_reviewers;
+        TextView book_languages;
+
+        ImageView book_thumbnail;
+        ImageView book_info;
+
+        RatingBar ratingBar;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            book_title_1 =(TextView) itemView.findViewById(R.id.book_title_1);
-            book_author_1 = (TextView) itemView.findViewById(R.id.book_author_1);
+            book_title = itemView.findViewById(R.id.book_title);
+            book_author = itemView.findViewById(R.id.book_author);
+            book_category = itemView.findViewById(R.id.book_category);
+            book_reviewers = itemView.findViewById(R.id.book_reviewers);
+            book_languages = itemView.findViewById(R.id.language);
+            book_thumbnail = itemView.findViewById(R.id.book_thumbnail);
+            book_info = itemView.findViewById(R.id.book_info);
+            ratingBar = itemView.findViewById(R.id.book_rating);
         }
-
-
-
     }
-
 
 }
