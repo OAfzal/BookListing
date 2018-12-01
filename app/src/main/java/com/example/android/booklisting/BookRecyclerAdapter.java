@@ -66,13 +66,16 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
                 BookExtendedFragment bookExtendedFragment = BookExtendedFragment.fragmentFactory();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
+
                 Bundle data = new Bundle();
                 data.putString("description",book.getBookDescription());
                 data.putString("title",book.getBookTitle());
 
                 bookExtendedFragment.setArguments(data);
 
-                fragmentTransaction.add(R.id.fragment_container,bookExtendedFragment).addToBackStack(null).commit();
+                fragmentTransaction.replace(R.id.fragment_container,bookExtendedFragment).addToBackStack(getClass().getName()).commit();
+
+
 //                Intent intent = new Intent(context,BookExtendedActivity.class);
 //                intent.putExtra("description",book.getBookDescription());
 //                intent.putExtra("title",book.getBookTitle());
