@@ -29,7 +29,7 @@ import java.util.ArrayList;
  */
 public class MainFragment extends android.support.v4.app.Fragment {
 
-    public String BOOKS_REQUEST_URL = "https://www.googleapis.com/books/v1/volumes?key=AIzaSyBsLDs0hHCiRJa5dW8YPJS81pWLTMr8noo&prettyPrint=true&q=";
+    public String BOOKS_REQUEST_URL = "https://www.googleapis.com/books/v1/volumes?key=AIzaSyBsLDs0hHCiRJa5dW8YPJS81pWLTMr8noo&prettyPrint=true&q=isbn:";
 
     View rootView;
 
